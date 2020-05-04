@@ -1,12 +1,14 @@
 package com.jianhui.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
+
 
 @Data
 @Entity
@@ -30,6 +32,10 @@ public class Product {
     private Unit unit;
 
     @ManyToMany(mappedBy = "products")
-    private Set<Bag> bags;
+    private List<Orders> orders;
+
+    @ManyToOne
+    @JsonIgnore
+    private Store store;
 
 }

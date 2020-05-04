@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,5 +20,5 @@ public class County {
     private String name;
 
     @ManyToMany(mappedBy = "counties")
-    private Set<Store> stores;
+    private List<Store> stores;
 }
