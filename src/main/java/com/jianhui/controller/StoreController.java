@@ -1,17 +1,13 @@
 package com.jianhui.controller;
 
-import com.jianhui.model.County;
 import com.jianhui.model.Store;
 import com.jianhui.repository.CountyRepository;
 import com.jianhui.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -20,9 +16,6 @@ public class StoreController {
 
     @Autowired
     StoreRepository storeRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     CountyRepository countyRepository;
@@ -47,6 +40,11 @@ public class StoreController {
     @GetMapping("/searchByName/{storeName}")
     public Store findByStoreName(@PathVariable("storeName") String storeName){
         return storeRepository.findByStoreName(storeName);
+    }
+
+    @GetMapping("/searchById/{id}")
+    public Store findByStoreId(@PathVariable("id") Integer id){
+        return storeRepository.findById(id).orElse(null);
     }
 
 //    @PutMapping("/secure/update")

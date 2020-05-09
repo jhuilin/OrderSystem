@@ -13,6 +13,9 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"storeName", "username"})
+})
 public class Store {
 
     @Id
@@ -25,6 +28,10 @@ public class Store {
     private String phone;
     private String email;
     private Integer state;
+    private String imageUrl;
+    private String address1;
+    private String city;
+    private Integer zip;
 
     private String role;
 

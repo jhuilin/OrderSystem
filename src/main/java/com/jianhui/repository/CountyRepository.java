@@ -2,8 +2,10 @@ package com.jianhui.repository;
 
 import com.jianhui.model.County;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public interface CountyRepository extends JpaRepository<County, Integer> {
     County findByName(String name);
 

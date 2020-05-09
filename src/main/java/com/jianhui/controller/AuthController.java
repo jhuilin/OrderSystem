@@ -6,6 +6,8 @@ import com.jianhui.repository.CountyRepository;
 import com.jianhui.repository.StoreRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +28,22 @@ public class AuthController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public Store registerStore(@RequestBody Map<String, Object> registerStore){
+    public ResponseEntity<Store> registerStore(@RequestBody Map<String, Object> registerStore){
         Store store = new Store();
-        store.setStoreName((String)registerStore.get("storeName"));
-        store.setUsername((String)registerStore.get("username"));
+        String storeName = (String)registerStore.get("storeName");
+        String username = (String)registerStore.get("username");
+        if (storeRepository.findByStoreName(storeName) != null)
+            return new ResponseEntity<>(null,HttpStatus.CONFLICT);
+        if (storeRepository.findByUsername(username) != null)
+            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
+        store.setStoreName(storeName);
+        store.setUsername(username);
         store.setEmail((String)registerStore.get("email"));
         store.setPhone((String)registerStore.get("phone"));
+        store.setAddress1((String) registerStore.get("address1"));
+        store.setCity((String) registerStore.get("city"));
+        store.setZip((Integer) registerStore.get("zip"));
+        store.setImageUrl((String) registerStore.get("imageUrl"));
         store.setState(1);
         List<County> list = new LinkedList<>();
         List<LinkedHashMap<String,String>> temp = (List<LinkedHashMap<String, String>>) registerStore.get("counties");
@@ -43,17 +55,20 @@ public class AuthController {
         store.setCounties(list);
         store.setPassword(bCryptPasswordEncoder.encode((String)registerStore.get("password")));
         store.setRole("ROLE_STORE");
-        return storeRepository.save(store);
+        return new ResponseEntity<>(storeRepository.save(store),HttpStatus.OK);
 
     }
 
     @PostMapping("manager/register")
-    public Store registerAdmin(@RequestBody Map<String, Object> registerAdmin){
+    public ResponseEntity<Store> registerAdmin(@RequestBody Map<String, Object> registerAdmin){
         Store store = new Store();
-        store.setUsername((String)registerAdmin.get("username"));
+        String username = (String)registerAdmin.get("username");
+        if (storeRepository.findByUsername(username) != null)
+            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
+        store.setUsername(username);
         store.setPassword(bCryptPasswordEncoder.encode((String)registerAdmin.get("password")));
         store.setRole("ROLE_ADMIN");
-        return storeRepository.save(store);
+        return new ResponseEntity<>(storeRepository.save(store), HttpStatus.OK);
     }
 
 }

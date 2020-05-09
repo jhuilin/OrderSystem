@@ -7,6 +7,7 @@ import com.jianhui.repository.TypeRepository;
 import com.jianhui.repository.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.Map;
@@ -34,12 +35,20 @@ public class SecuredProductController {
         product.setName((String) p.get("name"));
         product.setQty((Integer) p.get("qty"));
         product.setPrice((Double) p.get("price"));
+        String image = (String)p.get("imageUrl");
+        if (image != null)
+            product.setImageUrl(image);
+        String description = (String)p.get("description");
+        if (description != null)
+            product.setDescription(description);
         product.setState(1);
         product.setUnit(unitRepository.findByName((String) p.get("unit")));
         product.setType(typeRepository.findByName((String) p.get("type")));
         product.setStore(storeRepository.findByStoreName((String) p.get("store")));
         return productRepository.save(product);
     }
+
+
 
     @PutMapping("/update")
     public Product update(@RequestBody Map<String, Object> p) {
@@ -49,6 +58,12 @@ public class SecuredProductController {
             product.setQty((Integer) p.get("qty"));
             product.setPrice((Double) p.get("price"));
             product.setState((Integer) p.get("state"));
+            String image = (String)p.get("imageUrl");
+            if (image != null)
+                product.setImageUrl(image);
+            String description = (String)p.get("description");
+            if (description != null)
+                product.setDescription(description);
             product.setUnit(unitRepository.findByName((String) p.get("unit")));
             product.setType(typeRepository.findByName((String) p.get("type")));
             return productRepository.save(product);

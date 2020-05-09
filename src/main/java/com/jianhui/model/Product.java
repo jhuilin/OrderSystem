@@ -24,6 +24,8 @@ public class Product {
     private Integer qty;
     private Double price;
     private Integer state;
+    private String imageUrl;
+    private String description;
 
     @OneToOne
     private Type type;
