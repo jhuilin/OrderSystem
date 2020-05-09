@@ -8,9 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.HashMap;
 
-/**
- * Created by echisan on 2018/6/23
- */
 public class JwtTokenUtils {
 
     public static final String TOKEN_HEADER = "Authorization";

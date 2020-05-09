@@ -1,10 +1,5 @@
 package com.jianhui.exception;
 
-/**
- * @description: 自定义异常
- * @author: maxiao1
- * @date: 2019/9/13 17:21
- */
 public class TokenIsExpiredException extends Exception {
 
 

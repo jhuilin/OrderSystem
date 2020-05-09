@@ -19,9 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by echisan on 2018/6/23
- */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private ThreadLocal<Integer> rememberMe = new ThreadLocal<>();
