@@ -1,7 +1,7 @@
 package com.jianhui.controller.admin;
 
 import com.jianhui.model.Unit;
-import com.jianhui.repository.UnitRepository;
+import com.jianhui.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,22 +12,20 @@ import java.util.Map;
 public class AdminUnitController {
 
     @Autowired
-    UnitRepository unitRepository;
+    UnitService unitService;
 
     @DeleteMapping("/deleteById/{id}")
     public void deleteUnitById(@PathVariable("id") Integer id) {
-        unitRepository.deleteById(id);
+        unitService.deleteUnitById(id);
     }
 
     @DeleteMapping("/deleteByName/{name}")
     public void deleteUnitByName(@PathVariable("name") String name) {
-        unitRepository.deleteByName(name);
+        unitService.deleteUnitByName(name);
     }
 
     @PostMapping("/add")
-    public Unit addCounty(@RequestBody Map<String, String> u){
-        Unit unit = new Unit();
-        unit.setName(u.get("name"));
-        return unitRepository.save(unit);
+    public Unit addUnit(@RequestBody Map<String, String> u){
+        return unitService.addUnit(u);
     }
 }

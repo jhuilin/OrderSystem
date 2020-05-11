@@ -1,7 +1,7 @@
 package com.jianhui.controller.admin;
 
 import com.jianhui.model.County;
-import com.jianhui.repository.CountyRepository;
+import com.jianhui.service.CountyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,23 +12,21 @@ import java.util.Map;
 public class AdminCountyController {
 
     @Autowired
-    CountyRepository countyRepository;
+    CountyService countyService;
 
     @DeleteMapping("/deleteById/{id}")
     public void deleteCountyById(@PathVariable("id") Integer id) {
-        countyRepository.deleteById(id);
+        countyService.deleteCountyById(id);
     }
 
     @DeleteMapping("/deleteByName/{name}")
-    public void deleteCountyById(@PathVariable("name") String name) {
-        countyRepository.deleteByName(name);
+    public void deleteCountyByName(@PathVariable("name") String name) {
+        countyService.deleteCountyByName(name);
     }
 
     @PostMapping("/add")
     public County addCounty(@RequestBody Map<String, String> c){
-        County county = new County();
-        county.setName(c.get("name"));
-        return countyRepository.save(county);
+        return countyService.addCounty(c);
     }
 
 

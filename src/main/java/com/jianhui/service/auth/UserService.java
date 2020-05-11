@@ -1,4 +1,4 @@
-package com.jianhui.service;
+package com.jianhui.service.auth;
 
 import com.jianhui.model.JwtStore;
 import com.jianhui.model.Store;
@@ -10,14 +10,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private StoreRepository storeRepository;
+    StoreRepository storeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+
         Store store = storeRepository.findByUsername(s);
-        return new JwtStore(store);
+        if (store == null) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        JwtStore jwtStore = new JwtStore(store);
+        return jwtStore;
     }
+
 }

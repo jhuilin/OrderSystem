@@ -1,14 +1,9 @@
 package com.jianhui.controller.secured;
 
 import com.jianhui.model.*;
-import com.jianhui.repository.ProductRepository;
-import com.jianhui.repository.StoreRepository;
-import com.jianhui.repository.TypeRepository;
-import com.jianhui.repository.UnitRepository;
+import com.jianhui.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import java.util.Map;
 
@@ -17,63 +12,20 @@ import java.util.Map;
 public class SecuredProductController {
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    UnitRepository unitRepository;
-
-    @Autowired
-    TypeRepository typeRepository;
-
-    @Autowired
-    StoreRepository storeRepository;
-
+    ProductService productService;
 
     @PostMapping("/add")
     public Product addProduct(@RequestBody Map<String, Object> p) {
-        Product product = new Product();
-        product.setName((String) p.get("name"));
-        product.setQty((Integer) p.get("qty"));
-        product.setPrice((Double) p.get("price"));
-        String image = (String)p.get("imageUrl");
-        if (image != null)
-            product.setImageUrl(image);
-        String description = (String)p.get("description");
-        if (description != null)
-            product.setDescription(description);
-        product.setState(1);
-        product.setUnit(unitRepository.findByName((String) p.get("unit")));
-        product.setType(typeRepository.findByName((String) p.get("type")));
-        product.setStore(storeRepository.findByStoreName((String) p.get("store")));
-        return productRepository.save(product);
+        return productService.addProduct(p);
     }
-
-
 
     @PutMapping("/update")
     public Product update(@RequestBody Map<String, Object> p) {
-        Product product = productRepository.findById((Integer) p.get("pid")).orElse(null);
-        if (product != null ){
-            product.setName((String) p.get("name"));
-            product.setQty((Integer) p.get("qty"));
-            product.setPrice((Double) p.get("price"));
-            product.setState((Integer) p.get("state"));
-            String image = (String)p.get("imageUrl");
-            if (image != null)
-                product.setImageUrl(image);
-            String description = (String)p.get("description");
-            if (description != null)
-                product.setDescription(description);
-            product.setUnit(unitRepository.findByName((String) p.get("unit")));
-            product.setType(typeRepository.findByName((String) p.get("type")));
-            return productRepository.save(product);
-        }
-        else
-            return null;
+        return productService.update(p);
     }
 
     @DeleteMapping("deleteById/{id}")
     public void deleteProductById(@PathVariable("id") Integer id) {
-        productRepository.deleteById(id);
+        productService.deleteProductById(id);
     }
 }
