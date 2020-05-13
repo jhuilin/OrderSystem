@@ -59,48 +59,19 @@ public class StoreService {
         return storeRepository.findById(id);
     }
 
-    public Store updateAdmin(Map<String, Object> updatedAdmin){
-        Store store = storeRepository.findByUsername((String) updatedAdmin.get("username"));
-        store.setPassword(bCryptPasswordEncoder.encode((String)updatedAdmin.get("password")));
-        storeRepository.save(store);
-        return store;
-    }
-
     public void deleteStoreById(Integer id) {
         storeRepository.deleteById(id);
     }
 
-    public boolean validateByUsrEmail(Map<String, String> s){
-        Store s1 = storeRepository.findByUsername(s.get("username"));
-        Store s2 = storeRepository.findByEmail(s.get("email"));
-        if (s1 == null || s2 == null || s1.getSid() != s2.getSid())
-            return false;
-        return true;
-    }
-
-    public boolean validateByPassword(Map<String, String> s){
-        Store s1 = storeRepository.findByUsername(s.get("username"));
-        String oldPassword = s.get("password");
-        if (bCryptPasswordEncoder.matches(oldPassword,s1.getPassword()))
-            return true;
-        return false;
-    }
-
-    public ResponseEntity<Store> changePassword(Map<String, String> s){
-        Store store = storeRepository.findByUsername(s.get("username"));
-        store.setPassword(bCryptPasswordEncoder.encode(s.get("password")));
-        return new ResponseEntity<>(storeRepository.save(store), HttpStatus.OK);
-    }
-
-    public Store update(Map<String, Object> updatedStore){
-        Store store = storeRepository.findByUsername((String) updatedStore.get("username"));
+    public ResponseEntity<Store> update(Map<String, Object> updatedStore){
+        Store store = storeRepository.findById((Integer) updatedStore.get("store")).orElse(null);
+        if (store == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         store.setStoreName((String) updatedStore.get("storeName"));
         store.setEmail((String) updatedStore.get("email"));
         store.setPhone((String)updatedStore.get("phone"));
         store.setState((Integer) updatedStore.get("state"));
-        String image = (String)updatedStore.get("imageUrl");
-        if (image != null)
-            store.setImageUrl(image);
+        store.setImageUrl((String)updatedStore.get("imageUrl"));
         store.setAddress1((String) updatedStore.get("address1"));
         store.setCity((String) updatedStore.get("city"));
         store.setZip((Integer) updatedStore.get("zip"));
@@ -112,8 +83,39 @@ public class StoreService {
             }
         }
         store.setCounties(list);
-        storeRepository.save(store);
-        return store;
+        return new ResponseEntity<>(storeRepository.save(store),HttpStatus.OK);
+    }
+
+    public ResponseEntity<Store> validateByUsrEmail(Map<String, String> s){
+        Store s1 = storeRepository.findByUsername(s.get("username"));
+        Store s2 = storeRepository.findByEmail(s.get("email"));
+        if (s1 == null || s2 == null || s1.getSid() != s2.getSid())
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(s1,HttpStatus.OK);
+    }
+
+    public ResponseEntity<Store> validateByPassword(Map<String, String> s){
+        Store s1 = storeRepository.findByUsername(s.get("username"));
+        String oldPassword = s.get("password");
+        if (bCryptPasswordEncoder.matches(oldPassword,s1.getPassword()))
+            return new ResponseEntity<>(s1, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<Store> changePassword(Map<String, Object> s){
+        Store store = storeRepository.findById((Integer) s.get("id")).orElse(null);
+        if (store == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        store.setPassword(bCryptPasswordEncoder.encode((String) s.get("password")));
+        return new ResponseEntity<>(storeRepository.save(store), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Store> updateAdmin(Map<String, Object> updatedAdmin){
+        Store store = storeRepository.findByUsername((String) updatedAdmin.get("username"));
+        if (store == null || !store.getRole().equalsIgnoreCase("ROLE_ADMIN"))
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        store.setPassword(bCryptPasswordEncoder.encode((String)updatedAdmin.get("password")));
+        return new ResponseEntity<>(storeRepository.save(store),HttpStatus.OK);
     }
 
     private List<Store> allStores(){

@@ -22,7 +22,7 @@ public class AdminStoreController {
     }
 
     @PutMapping("/update")
-    public Store updateAdmin(@RequestBody Map<String, Object> updatedAdmin){
+    public ResponseEntity<Store> updateAdmin(@RequestBody Map<String, Object> updatedAdmin){
         return storeService.updateAdmin(updatedAdmin);
     }
 
@@ -32,18 +32,4 @@ public class AdminStoreController {
     }
 
 
-    @GetMapping("/validateByUsrEmail")
-    public boolean validateByUsrEmail(@RequestBody Map<String, String> s){
-        return storeService.validateByUsrEmail(s);
-    }
-
-    @GetMapping("/validatePassword")
-    public boolean validateByPassword(@RequestBody Map<String, String> s){
-        return storeService.validateByPassword(s);
-    }
-
-    @PutMapping("/changePassword")
-    public ResponseEntity<Store> changePassword(@RequestBody Map<String, String> s){
-        return storeService.changePassword(s);
-    }
 }

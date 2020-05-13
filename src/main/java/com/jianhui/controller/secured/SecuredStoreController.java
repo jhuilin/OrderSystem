@@ -21,21 +21,21 @@ public class SecuredStoreController {
     }
 
     @PutMapping("/update")
-    public Store update(@RequestBody Map<String, Object> updatedStore){
+    public ResponseEntity<Store> update(@RequestBody Map<String, Object> updatedStore){
         return storeService.update(updatedStore);
     }
     @GetMapping("/validateByUsrEmail")
-    public boolean validateByUsrEmail(@RequestBody Map<String, String> s){
+    public ResponseEntity<Store> validateByUsrEmail(@RequestBody Map<String, String> s){
         return storeService.validateByUsrEmail(s);
     }
 
     @GetMapping("/validatePassword")
-    public boolean validateByPassword(@RequestBody Map<String, String> s){
+    public ResponseEntity<Store> validateByPassword(@RequestBody Map<String, String> s){
         return storeService.validateByPassword(s);
     }
 
     @PutMapping("/changePassword")
-    public ResponseEntity<Store> changePassword(@RequestBody Map<String, String> s){
+    public ResponseEntity<Store> changePassword(@RequestBody Map<String, Object> s){
         return storeService.changePassword(s);
     }
 

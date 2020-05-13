@@ -7,6 +7,8 @@ import com.jianhui.repository.StoreRepository;
 import com.jianhui.repository.TypeRepository;
 import com.jianhui.repository.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,40 +43,31 @@ public class ProductService {
         product.setName((String) p.get("name"));
         product.setQty((Integer) p.get("qty"));
         product.setPrice((Double) p.get("price"));
-        String image = (String)p.get("imageUrl");
-        if (image != null)
-            product.setImageUrl(image);
-        String description = (String)p.get("description");
-        if (description != null)
-            product.setDescription(description);
         product.setState(1);
+        product.setImageUrl((String)p.get("imageUrl"));
+        product.setDescription((String)p.get("description"));
         product.setUnit(unitRepository.findByName((String) p.get("unit")));
         product.setType(typeRepository.findByName((String) p.get("type")));
-        product.setStore(storeRepository.findByStoreName((String) p.get("store")));
+        product.setStore(storeRepository.findById((Integer) p.get("store")).orElse(null));
         return productRepository.save(product);
     }
 
 
 
-    public Product update(Map<String, Object> p) {
+    public ResponseEntity<Product> update(Map<String,Object> p) {
         Product product = productRepository.findById((Integer) p.get("pid")).orElse(null);
-        if (product != null ){
-            product.setName((String) p.get("name"));
-            product.setQty((Integer) p.get("qty"));
-            product.setPrice((Double) p.get("price"));
-            product.setState((Integer) p.get("state"));
-            String image = (String)p.get("imageUrl");
-            if (image != null)
-                product.setImageUrl(image);
-            String description = (String)p.get("description");
-            if (description != null)
-                product.setDescription(description);
-            product.setUnit(unitRepository.findByName((String) p.get("unit")));
-            product.setType(typeRepository.findByName((String) p.get("type")));
-            return productRepository.save(product);
-        }
-        else
-            return null;
+        if (product == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        product.setName((String) p.get("name"));
+        product.setQty((Integer) p.get("qty"));
+        product.setPrice((Double) p.get("price"));
+        product.setState((Integer) p.get("state"));
+        product.setImageUrl((String)p.get("imageUrl"));
+        product.setDescription((String)p.get("description"));
+        product.setUnit(unitRepository.findByName((String) p.get("unit")));
+        product.setType(typeRepository.findByName((String) p.get("type")));
+        return new ResponseEntity<>(productRepository.save(product),HttpStatus.OK);
+
     }
 
     public void deleteProductById(Integer id) {

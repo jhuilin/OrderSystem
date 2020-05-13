@@ -43,7 +43,7 @@ public class OrderService {
             }
         }
         orders.setProducts(list);
-        orders.setStore(storeRepository.findByStoreName((String) o.get("store")));
+        orders.setStore(storeRepository.findById((Integer) o.get("store")).orElse(null));
         return ordersRepository.save(orders);
     }
 

@@ -3,6 +3,7 @@ package com.jianhui.controller.secured;
 import com.jianhui.model.*;
 import com.jianhui.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ public class SecuredProductController {
     }
 
     @PutMapping("/update")
-    public Product update(@RequestBody Map<String, Object> p) {
+    public ResponseEntity<Product> update(@RequestBody Map<String, Object> p) {
         return productService.update(p);
     }
 
