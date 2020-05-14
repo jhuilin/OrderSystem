@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.server.csrf.ServerCsrfTokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -24,10 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @www.codesheep.cn
- * 20190312
- */
 @Service
 public class AuthServiceImpl{
 

@@ -3,7 +3,6 @@ package com.jianhui.repository;
 import com.jianhui.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store,Integer> {
